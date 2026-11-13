@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/io.github.mtdhllf/tug-engine-core"><img alt="Maven Central version" src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fmtdhllf%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release"></a>
+  <a href="https://central.sonatype.com/artifact/cc.nanio/tug-engine-core"><img alt="Maven Central version" src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcc%2Fnanio%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release"></a>
   <img alt="Android 9+" src="https://img.shields.io/badge/Android-9%2B-3DDC84?logo=android&logoColor=white">
   <img alt="Kotlin 2.2" src="https://img.shields.io/badge/Kotlin-2.2-7F52FF?logo=kotlin&logoColor=white">
   <img alt="Jetpack Compose" src="https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white">
@@ -18,7 +18,7 @@
 
 ---
 
-Tug-Android is the Android version of [Tug](https://github.com/mtdhllf/Tug-Desktop). The desktop (Rust) version focuses on BitTorrent and Windows integration. The Android app focuses on **multi-connection HTTP/HTTPS downloads, resume support, and background downloads**, while exposing its download core as lightweight Kotlin libraries.
+Tug-Android is the Android version of [Tug](https://github.com/nanio-dev/Tug-Desktop). The desktop (Rust) version focuses on BitTorrent and Windows integration. The Android app focuses on **multi-connection HTTP/HTTPS downloads, resume support, and background downloads**, while exposing its download core as lightweight Kotlin libraries.
 
 ### Highlights
 
@@ -60,24 +60,24 @@ Tug-Android is the Android version of [Tug](https://github.com/mtdhllf/Tug-Deskt
 
 ### Download Libraries
 
-Five libraries under groupId `io.github.mtdhllf` (published to Maven Central; project dependencies can also be used directly inside this repository):
+Five libraries under groupId `cc.nanio` (published to Maven Central; project dependencies can also be used directly inside this repository):
 
-Current version: ![Maven Central](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fmtdhllf%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release)
+Current version: ![Maven Central](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcc%2Fnanio%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release)
 
 | Coordinate | Contents |
 |---|---|
-| `io.github.mtdhllf:tug-engine-core` | Engine contracts + task/state/settings/event models + `TaskManager`/`TaskStore` |
-| `io.github.mtdhllf:tug-http` | HTTP multi-connection segmented engine (JDK `HttpURLConnection` by default) |
-| `io.github.mtdhllf:tug-http-okhttp` | OkHttp implementation of the HTTP engine (choose one) |
-| `io.github.mtdhllf:tug-store-sqlite` | Persistent storage for tasks and settings |
-| `io.github.mtdhllf:tug-engine-torrent` | BitTorrent/magnet engine (libtorrent4j) |
+| `cc.nanio:tug-engine-core` | Engine contracts + task/state/settings/event models + `TaskManager`/`TaskStore` |
+| `cc.nanio:tug-http` | HTTP multi-connection segmented engine (JDK `HttpURLConnection` by default) |
+| `cc.nanio:tug-http-okhttp` | OkHttp implementation of the HTTP engine (choose one) |
+| `cc.nanio:tug-store-sqlite` | Persistent storage for tasks and settings |
+| `cc.nanio:tug-engine-torrent` | BitTorrent/magnet engine (libtorrent4j) |
 
 ```kotlin
-implementation("io.github.mtdhllf:tug-engine-core:1.0.0")
-implementation("io.github.mtdhllf:tug-http:1.0.0")          // or
-implementation("io.github.mtdhllf:tug-http-okhttp:1.0.0")
-implementation("io.github.mtdhllf:tug-store-sqlite:1.0.0")  // Android, optional
-implementation("io.github.mtdhllf:tug-engine-torrent:1.0.0") // Android, optional
+implementation("cc.nanio:tug-engine-core:1.0.0")
+implementation("cc.nanio:tug-http:1.0.0")          // or
+implementation("cc.nanio:tug-http-okhttp:1.0.0")
+implementation("cc.nanio:tug-store-sqlite:1.0.0")  // Android, optional
+implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android, optional
 ```
 
 > Public API and integration guide: [`public/API.en.md`](public/API.en.md).

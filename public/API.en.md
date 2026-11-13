@@ -9,25 +9,25 @@ Tug splits HTTP/HTTPS and BitTorrent downloading into independently consumable K
 
 ## 1. Modules and Coordinates
 
-groupId: `io.github.mtdhllf`. All five modules share the same version.
+groupId: `cc.nanio`. All five modules share the same version.
 
 | Coordinate | Contents |
 |---|---|
-| `io.github.mtdhllf:tug-engine-core:1.0.0` | Engine contracts + models + `TaskManager`/`TaskStore` |
-| `io.github.mtdhllf:tug-http:1.0.0` | HTTP engine (JDK `HttpURLConnection`, no third-party HTTP dependency) |
-| `io.github.mtdhllf:tug-http-okhttp:1.0.0` | HTTP engine (OkHttp transport, choose one) |
-| `io.github.mtdhllf:tug-store-sqlite:1.0.0` | Persistent storage for tasks and settings |
-| `io.github.mtdhllf:tug-engine-torrent:1.0.0` | BitTorrent/magnet engine (libtorrent4j) |
+| `cc.nanio:tug-engine-core:1.0.0` | Engine contracts + models + `TaskManager`/`TaskStore` |
+| `cc.nanio:tug-http:1.0.0` | HTTP engine (JDK `HttpURLConnection`, no third-party HTTP dependency) |
+| `cc.nanio:tug-http-okhttp:1.0.0` | HTTP engine (OkHttp transport, choose one) |
+| `cc.nanio:tug-store-sqlite:1.0.0` | Persistent storage for tasks and settings |
+| `cc.nanio:tug-engine-torrent:1.0.0` | BitTorrent/magnet engine (libtorrent4j) |
 
 ```kotlin
 dependencies {
-    implementation("io.github.mtdhllf:tug-engine-core:1.0.0")
-    implementation("io.github.mtdhllf:tug-http:1.0.0")          // JDK implementation
+    implementation("cc.nanio:tug-engine-core:1.0.0")
+    implementation("cc.nanio:tug-http:1.0.0")          // JDK implementation
     // or
-    // implementation("io.github.mtdhllf:tug-http-okhttp:1.0.0") // OkHttp implementation
+    // implementation("cc.nanio:tug-http-okhttp:1.0.0") // OkHttp implementation
 
-    implementation("io.github.mtdhllf:tug-store-sqlite:1.0.0")   // Android, optional
-    implementation("io.github.mtdhllf:tug-engine-torrent:1.0.0") // Android, optional
+    implementation("cc.nanio:tug-store-sqlite:1.0.0")   // Android, optional
+    implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android, optional
 }
 ```
 

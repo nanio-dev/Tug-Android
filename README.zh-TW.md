@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/io.github.mtdhllf/tug-engine-core"><img alt="Maven Central version" src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fmtdhllf%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release"></a>
+  <a href="https://central.sonatype.com/artifact/cc.nanio/tug-engine-core"><img alt="Maven Central version" src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcc%2Fnanio%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release"></a>
   <img alt="Android 9+" src="https://img.shields.io/badge/Android-9%2B-3DDC84?logo=android&logoColor=white">
   <img alt="Kotlin 2.2" src="https://img.shields.io/badge/Kotlin-2.2-7F52FF?logo=kotlin&logoColor=white">
   <img alt="Jetpack Compose" src="https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white">
@@ -18,7 +18,7 @@
 
 ---
 
-Tug-Android 是 [Tug](https://github.com/mtdhllf/Tug-Desktop) 的 Android 版本。桌面端（Rust）著重於 BitTorrent 與 Windows 整合；Android 端以 **HTTP/HTTPS 多連線下載、續傳、背景下載** 為核心，同時把下載核心拆成可對外重複使用的輕量 Kotlin 程式庫。
+Tug-Android 是 [Tug](https://github.com/nanio-dev/Tug-Desktop) 的 Android 版本。桌面端（Rust）著重於 BitTorrent 與 Windows 整合；Android 端以 **HTTP/HTTPS 多連線下載、續傳、背景下載** 為核心，同時把下載核心拆成可對外重複使用的輕量 Kotlin 程式庫。
 
 ### 專案成果
 
@@ -60,24 +60,24 @@ Tug-Android 是 [Tug](https://github.com/mtdhllf/Tug-Desktop) 的 Android 版本
 
 ### 下載核心程式庫
 
-五個程式庫（groupId `io.github.mtdhllf`；已發布至 Maven Central，亦可於儲存庫內直接使用 project 相依）：
+五個程式庫（groupId `cc.nanio`；已發布至 Maven Central，亦可於儲存庫內直接使用 project 相依）：
 
-當前版本：![Maven Central](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fio%2Fgithub%2Fmtdhllf%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release)
+當前版本：![Maven Central](https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcc%2Fnanio%2Ftug-engine-core%2Fmaven-metadata.xml&query=%2Fmetadata%2Fversioning%2Frelease&label=release)
 
 | 座標 | 內容 |
 |---|---|
-| `io.github.mtdhllf:tug-engine-core` | 引擎契約 + 任務/狀態/設定/事件模型 + `TaskManager`/`TaskStore` |
-| `io.github.mtdhllf:tug-http` | HTTP 多連線分段引擎（JDK HttpURLConnection 預設實作） |
-| `io.github.mtdhllf:tug-http-okhttp` | HTTP 引擎的 OkHttp 實作（已有 OkHttp 相依時二選一） |
-| `io.github.mtdhllf:tug-store-sqlite` | 任務與設定的持久化儲存 |
-| `io.github.mtdhllf:tug-engine-torrent` | BitTorrent/magnet 引擎（libtorrent4j） |
+| `cc.nanio:tug-engine-core` | 引擎契約 + 任務/狀態/設定/事件模型 + `TaskManager`/`TaskStore` |
+| `cc.nanio:tug-http` | HTTP 多連線分段引擎（JDK HttpURLConnection 預設實作） |
+| `cc.nanio:tug-http-okhttp` | HTTP 引擎的 OkHttp 實作（已有 OkHttp 相依時二選一） |
+| `cc.nanio:tug-store-sqlite` | 任務與設定的持久化儲存 |
+| `cc.nanio:tug-engine-torrent` | BitTorrent/magnet 引擎（libtorrent4j） |
 
 ```kotlin
-implementation("io.github.mtdhllf:tug-engine-core:1.0.0")
-implementation("io.github.mtdhllf:tug-http:1.0.0")          // 或
-implementation("io.github.mtdhllf:tug-http-okhttp:1.0.0")
-implementation("io.github.mtdhllf:tug-store-sqlite:1.0.0")  // Android，可選
-implementation("io.github.mtdhllf:tug-engine-torrent:1.0.0") // Android，可選
+implementation("cc.nanio:tug-engine-core:1.0.0")
+implementation("cc.nanio:tug-http:1.0.0")          // 或
+implementation("cc.nanio:tug-http-okhttp:1.0.0")
+implementation("cc.nanio:tug-store-sqlite:1.0.0")  // Android，可選
+implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android，可選
 ```
 
 > 公開 API 與整合說明請見 [`public/API.zh-TW.md`](public/API.zh-TW.md)。

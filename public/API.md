@@ -9,25 +9,25 @@ Tug 下载库把 HTTP/HTTPS、BitTorrent 下载能力拆成可独立依赖的 Ko
 
 ## 1. 模块与坐标
 
-groupId：`io.github.mtdhllf`，五个模块使用同一版本号。
+groupId：`cc.nanio`，五个模块使用同一版本号。
 
 | 坐标 | 内容 |
 |---|---|
-| `io.github.mtdhllf:tug-engine-core:1.0.0` | 引擎契约 + 模型 + `TaskManager`/`TaskStore` |
-| `io.github.mtdhllf:tug-http:1.0.0` | HTTP 引擎（JDK `HttpURLConnection`，零三方 HTTP 依赖） |
-| `io.github.mtdhllf:tug-http-okhttp:1.0.0` | HTTP 引擎（OkHttp 传输，二选一） |
-| `io.github.mtdhllf:tug-store-sqlite:1.0.0` | 任务与设置的持久化存储 |
-| `io.github.mtdhllf:tug-engine-torrent:1.0.0` | BitTorrent/magnet 引擎（libtorrent4j） |
+| `cc.nanio:tug-engine-core:1.0.0` | 引擎契约 + 模型 + `TaskManager`/`TaskStore` |
+| `cc.nanio:tug-http:1.0.0` | HTTP 引擎（JDK `HttpURLConnection`，零三方 HTTP 依赖） |
+| `cc.nanio:tug-http-okhttp:1.0.0` | HTTP 引擎（OkHttp 传输，二选一） |
+| `cc.nanio:tug-store-sqlite:1.0.0` | 任务与设置的持久化存储 |
+| `cc.nanio:tug-engine-torrent:1.0.0` | BitTorrent/magnet 引擎（libtorrent4j） |
 
 ```kotlin
 dependencies {
-    implementation("io.github.mtdhllf:tug-engine-core:1.0.0")
-    implementation("io.github.mtdhllf:tug-http:1.0.0")          // JDK 实现
+    implementation("cc.nanio:tug-engine-core:1.0.0")
+    implementation("cc.nanio:tug-http:1.0.0")          // JDK 实现
     // 或
-    // implementation("io.github.mtdhllf:tug-http-okhttp:1.0.0") // OkHttp 实现
+    // implementation("cc.nanio:tug-http-okhttp:1.0.0") // OkHttp 实现
 
-    implementation("io.github.mtdhllf:tug-store-sqlite:1.0.0")   // Android，可选
-    implementation("io.github.mtdhllf:tug-engine-torrent:1.0.0") // Android，可选
+    implementation("cc.nanio:tug-store-sqlite:1.0.0")   // Android，可选
+    implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android，可选
 }
 ```
 

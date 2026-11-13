@@ -5,7 +5,7 @@ plugins {
     `signing`
 }
 
-group = "io.github.mtdhllf"
+group = "cc.nanio"
 version = "1.0.0"
 
 android {
@@ -61,7 +61,7 @@ afterEvaluate {
                 pom {
                     name.set("Tug Store SQLite")
                     description.set("Tug Android TaskStore implementation backed by native SQLite")
-                    url.set("https://github.com/mtdhllf/Tug-Android")
+                    url.set("https://github.com/nanio-dev/Tug-Android")
                     licenses {
                         license {
                             name.set("Apache-2.0")
@@ -75,9 +75,9 @@ afterEvaluate {
                         }
                     }
                     scm {
-                        connection.set("scm:git:git://github.com/mtdhllf/Tug-Android.git")
-                        developerConnection.set("scm:git:ssh://git@github.com/mtdhllf/Tug-Android.git")
-                        url.set("https://github.com/mtdhllf/Tug-Android")
+                        connection.set("scm:git:git://github.com/nanio-dev/Tug-Android.git")
+                        developerConnection.set("scm:git:ssh://git@github.com/nanio-dev/Tug-Android.git")
+                        url.set("https://github.com/nanio-dev/Tug-Android")
                     }
                 }
             }

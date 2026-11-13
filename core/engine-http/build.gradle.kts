@@ -5,7 +5,7 @@ plugins {
     `signing`
 }
 
-group = "io.github.mtdhllf"
+group = "cc.nanio"
 version = "1.0.0"
 
 kotlin {
@@ -48,7 +48,7 @@ publishing {
             pom {
                 name.set("Tug HTTP")
                 description.set("Tug multi-connection HTTP download engine (JDK transport)")
-                url.set("https://github.com/mtdhllf/Tug-Android")
+                url.set("https://github.com/nanio-dev/Tug-Android")
                 licenses {
                     license {
                         name.set("Apache-2.0")
@@ -62,9 +62,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection.set("scm:git:git://github.com/mtdhllf/Tug-Android.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/mtdhllf/Tug-Android.git")
-                    url.set("https://github.com/mtdhllf/Tug-Android")
+                    connection.set("scm:git:git://github.com/nanio-dev/Tug-Android.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/nanio-dev/Tug-Android.git")
+                    url.set("https://github.com/nanio-dev/Tug-Android")
                 }
             }
         }
