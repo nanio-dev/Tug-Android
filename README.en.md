@@ -250,8 +250,8 @@ Requirements:
 ./gradlew :app:assembleUniversalDebugAndroidTest
 adb install -r -t app/build/outputs/apk/universal/debug/app-universal-debug.apk
 adb install -r -t app/build/outputs/apk/androidTest/universal/debug/app-universal-debug-androidTest.apk
-adb shell am instrument -w -e class com.github.mtdhllf.tug.ui.MainUiTest \
-  com.github.mtdhllf.tug.test/androidx.test.runner.AndroidJUnitRunner
+adb shell am instrument -w -e class cc.nanio.tug.ui.MainUiTest \
+  cc.nanio.tug.test/androidx.test.runner.AndroidJUnitRunner
 
 # Release (5 ABI variants + AAB)
 ./gradlew :app:packageReleaseApks

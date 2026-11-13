@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.github.mtdhllf.sample_http"
+    namespace = "cc.nanio.sample_http"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.github.mtdhllf.sample_http"
+        applicationId = "cc.nanio.sample_http"
         minSdk = 28
         targetSdk = 37
         versionCode = 1

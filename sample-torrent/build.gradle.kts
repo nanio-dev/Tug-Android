@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.github.mtdhllf.sample_torrent"
+    namespace = "cc.nanio.sample_torrent"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.github.mtdhllf.sample_torrent"
+        applicationId = "cc.nanio.sample_torrent"
         minSdk = 28
         targetSdk = 37
         versionCode = 1

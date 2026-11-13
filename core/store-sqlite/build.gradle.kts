@@ -9,7 +9,7 @@ group = "cc.nanio"
 version = "1.0.0"
 
 android {
-    namespace = "com.github.mtdhllf.tug.core.store.sqlite"
+    namespace = "cc.nanio.tug.core.store.sqlite"
     compileSdk {
         version = release(37)
     }

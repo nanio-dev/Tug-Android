@@ -1,4 +1,4 @@
-﻿plugins {
+plugins {
     alias(libs.plugins.kotlin.jvm)
     application
 }
@@ -8,7 +8,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("com.github.mtdhllf.tug.sample.MainKt")
+    mainClass.set("cc.nanio.tug.sample.MainKt")
 }
 
 dependencies {

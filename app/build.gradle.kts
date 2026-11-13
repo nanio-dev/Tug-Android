@@ -14,13 +14,13 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.github.mtdhllf.tug"
+    namespace = "cc.nanio.tug"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.github.mtdhllf.tug"
+        applicationId = "cc.nanio.tug"
         minSdk = 28
         targetSdk = 37
         versionCode = 1

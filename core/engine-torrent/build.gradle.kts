@@ -8,7 +8,7 @@ group = "cc.nanio"
 version = "1.0.0"
 
 android {
-    namespace = "com.github.mtdhllf.tug.core.engine.torrent"
+    namespace = "cc.nanio.tug.core.engine.torrent"
     compileSdk {
         version = release(37)
     }
