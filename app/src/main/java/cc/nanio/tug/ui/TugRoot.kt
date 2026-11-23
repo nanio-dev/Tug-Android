@@ -6,12 +6,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -89,6 +94,7 @@ fun TugRoot() {
     val currentRoute = backStackEntry?.destination?.route
     var showAddSheet by rememberSaveable { mutableStateOf(false) }
     var addInitialUrl by rememberSaveable { mutableStateOf("") }
+    var checkingLink by remember { mutableStateOf(false) }
 
     fun openAdd(url: String? = null) {
         addInitialUrl = url.orEmpty()
@@ -111,7 +117,11 @@ fun TugRoot() {
     val pendingShare by app.pendingShare.collectAsState()
     LaunchedEffect(pendingShare) {
         val raw = pendingShare ?: return@LaunchedEffect
-        when (val target = UrlInspector.inspect(raw)) {
+        checkingLink = true
+        val target = runCatching { UrlInspector.inspect(raw) }
+            .getOrElse { InspectedTarget.Failed(it.message ?: "URL preflight failed") }
+        checkingLink = false
+        when (target) {
             is InspectedTarget.Download -> openAdd(target.url)
             is InspectedTarget.WebPage -> {
                 webViewLauncher.launch(WebViewActivity.intent(context, target.url))
@@ -142,6 +152,22 @@ fun TugRoot() {
         else -> null
     }
     val showChrome = selectedRoute != null
+
+    if (checkingLink) {
+        AlertDialog(
+            onDismissRequest = {},
+            confirmButton = {},
+            title = { Text(stringResource(R.string.scan_checking)) },
+            text = {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(modifier = Modifier.size(28.dp))
+                }
+            },
+        )
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
