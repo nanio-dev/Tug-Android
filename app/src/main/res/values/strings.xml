@@ -259,4 +259,6 @@
     <string name="scan_unsupported">Unsupported QR content</string>
     <string name="webview_title">Web download</string>
     <string name="webview_invalid_url">Invalid web address</string>
-    <string name="webview_download_unsupported">This download cannot be handed to Tug: %1$s</string></resources>
+    <string name="webview_download_unsupported">This download cannot be handed to Tug: %1$s</string>
+    <string name="webview_close">Close</string>
+</resources>

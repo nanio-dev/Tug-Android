@@ -259,4 +259,6 @@
     <string name="scan_unsupported">不支持的类型</string>
     <string name="webview_title">网页下载</string>
     <string name="webview_invalid_url">网页地址无效</string>
-    <string name="webview_download_unsupported">该下载无法交给 Tug：%1$s</string></resources>
+    <string name="webview_download_unsupported">该下载无法交给 Tug：%1$s</string>
+    <string name="webview_close">关闭</string>
+</resources>

@@ -3,25 +3,29 @@ package cc.nanio.tug
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.View
 import android.webkit.CookieManager
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient as Client
+import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import cc.nanio.tug.R
 
 /**
  * 扫码/外部 HTTP 链接不是直链时，用 WebView 打开网页。
  *
- * 当网页触发下载（或用户点击磁力链接）时，把真实下载地址通过
- * RESULT_OK 返回给调用方，由调用方复用新建下载弹窗。
+ * 顶部提供白色关闭导航栏和主题色细进度条；网页触发下载时，
+ * 把真实下载地址通过 RESULT_OK 返回给调用方，复用新建下载弹窗。
  */
 class WebViewActivity : AppCompatActivity() {
     private lateinit var webView: WebView
+    private lateinit var progressBar: ProgressBar
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +37,10 @@ class WebViewActivity : AppCompatActivity() {
             return
         }
 
-        title = getString(R.string.webview_title)
-        webView = WebView(this).apply {
+        setContentView(R.layout.activity_webview)
+        findViewById<ImageButton>(R.id.web_close).setOnClickListener { finish() }
+        progressBar = findViewById(R.id.web_progress)
+        webView = findViewById<WebView>(R.id.web_view).apply {
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.databaseEnabled = true
@@ -47,6 +53,19 @@ class WebViewActivity : AppCompatActivity() {
             CookieManager.getInstance().setAcceptCookie(true)
             CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
             webViewClient = object : Client() {
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    super.onPageStarted(view, url, favicon)
+                    progressBar.progress = 0
+                    progressBar.visibility = View.VISIBLE
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    if (progressBar.progress >= 100) {
+                        progressBar.visibility = View.GONE
+                    }
+                }
+
                 override fun shouldOverrideUrlLoading(
                     view: WebView?,
                     request: WebResourceRequest?,
@@ -59,7 +78,17 @@ class WebViewActivity : AppCompatActivity() {
                     return false
                 }
             }
-            webChromeClient = WebChromeClient()
+            webChromeClient = object : WebChromeClient() {
+                override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                    super.onProgressChanged(view, newProgress)
+                    progressBar.progress = newProgress
+                    if (newProgress >= 100) {
+                        progressBar.visibility = View.GONE
+                    } else {
+                        progressBar.visibility = View.VISIBLE
+                    }
+                }
+            }
             setDownloadListener { url, _, _, mimeType, _ ->
                 if (url.startsWith("http://", ignoreCase = true) ||
                     url.startsWith("https://", ignoreCase = true)
@@ -74,7 +103,6 @@ class WebViewActivity : AppCompatActivity() {
                 }
             }
         }
-        setContentView(webView)
         webView.loadUrl(initialUrl)
 
         onBackPressedDispatcher.addCallback(
