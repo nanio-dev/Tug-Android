@@ -22,8 +22,10 @@ import cc.nanio.tug.core.model.TugLog
 import cc.nanio.tug.core.model.TugTags
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -37,8 +39,9 @@ class DownloadService : Service() {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var lastNotificationAt = 0L
-    private var idleSince = 0L
     private var foregroundStarted = false
+    private var idleStopJob: Job? = null
+    private var finishStopJob: Job? = null
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -86,38 +89,73 @@ class DownloadService : Service() {
         scope.launch {
             app.taskManager.tasks.collect { list ->
                 val active = list.filter { it.state.isActive }
+                if (active.isEmpty()) {
+                    // 不要在空闲时重新发布进度通知；只等待短暂空闲后停止服务。
+                    // 完成/失败事件会先发完成通知，再立即移除进度通知。
+                    scheduleIdleStop()
+                    return@collect
+                }
+                idleStopJob?.cancel()
+                idleStopJob = null
+                finishStopJob?.cancel()
+                finishStopJob = null
                 val stats = app.taskManager.globalStats()
                 updateNotification(active, stats, list)
-                if (active.isEmpty()) {
-                    val now = System.currentTimeMillis()
-                    if (idleSince == 0L) {
-                        idleSince = now
-                    } else if (now - idleSince >= IDLE_STOP_MS) {
-                        TugLog.i(TugTags.SVC, "空闲 ${IDLE_STOP_MS}ms，停止前台服务")
-                        stopForegroundNow()
-                    }
-                } else {
-                    idleSince = 0L
-                }
             }
         }
         scope.launch {
             app.taskManager.events.collect { event ->
                 when (event) {
-                    is TaskEvent.Completed -> notifyFinished(
-                        event.id,
-                        getString(R.string.notification_completed),
-                        event.name,
-                        completed = true,
-                    )
-                    is TaskEvent.Failed -> notifyFinished(
-                        event.id,
-                        getString(R.string.notification_failed),
-                        event.message,
-                        completed = false,
-                    )
+                    is TaskEvent.Completed -> {
+                        notifyFinished(
+                            event.id,
+                            getString(R.string.notification_completed),
+                            event.name,
+                            completed = true,
+                        )
+                        scheduleFinishStop()
+                    }
+                    is TaskEvent.Failed -> {
+                        notifyFinished(
+                            event.id,
+                            getString(R.string.notification_failed),
+                            event.message,
+                            completed = false,
+                        )
+                        scheduleFinishStop()
+                    }
                     else -> Unit
                 }
+            }
+        }
+    }
+
+    /**
+     * 完成通知已经发出后，短暂等待同一批任务的其他终态事件，
+     * 再移除前台进度通知，避免通知栏残留"下载中"和"已完成"两条。
+     */
+    private fun scheduleFinishStop() {
+        finishStopJob?.cancel()
+        finishStopJob = scope.launch {
+            delay(FINISH_STOP_DELAY_MS)
+            val app = application as TugApp
+            if (app.taskManager.tasks.value.none { it.state.isActive }) {
+                idleStopJob?.cancel()
+                idleStopJob = null
+                TugLog.i(TugTags.SVC, "任务已结束，移除进度通知并停止服务")
+                stopForegroundNow()
+            }
+        }
+    }
+
+    private fun scheduleIdleStop() {
+        if (idleStopJob?.isActive == true) return
+        idleStopJob = scope.launch {
+            delay(IDLE_STOP_MS)
+            val app = application as TugApp
+            if (app.taskManager.tasks.value.none { it.state.isActive }) {
+                TugLog.i(TugTags.SVC, "空闲 ${IDLE_STOP_MS}ms，停止前台服务")
+                stopForegroundNow()
             }
         }
     }
@@ -280,6 +318,7 @@ class DownloadService : Service() {
         const val EXTRA_TASK_ID = "task_id"
 
         private const val IDLE_STOP_MS = 3_000L
+        private const val FINISH_STOP_DELAY_MS = 500L
         private const val NOTIFY_INTERVAL_MS = 900L
 
         fun start(context: Context) {
