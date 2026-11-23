@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- ZXing 取景器激光线跟随 Tug 品牌主题色（Accent）。 -->
+    <color name="zxing_viewfinder_laser">#FF676728</color>
+    <color name="zxing_possible_result_points">#FFCACA8E</color>
 </resources>

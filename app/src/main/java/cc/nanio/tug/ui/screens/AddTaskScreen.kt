@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cc.nanio.tug.R
+import cc.nanio.tug.QrScanActivity
 import cc.nanio.tug.TugApp
 import cc.nanio.tug.WebViewActivity
 import cc.nanio.tug.core.model.NewTask
@@ -213,6 +214,7 @@ fun AddTaskScreen(
                         onClick = {
                             if (parsing || submitting) return@IconButton
                             val options = ScanOptions()
+                                .setCaptureActivity(QrScanActivity::class.java)
                                 .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
                                 .setPrompt(context.getString(R.string.scan_prompt))
                                 .setBeepEnabled(false)
