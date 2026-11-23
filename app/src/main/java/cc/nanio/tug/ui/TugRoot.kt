@@ -1,5 +1,8 @@
 package cc.nanio.tug.ui
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +45,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import cc.nanio.tug.R
 import cc.nanio.tug.TugApp
+import cc.nanio.tug.WebViewActivity
+import cc.nanio.tug.net.InspectedTarget
+import cc.nanio.tug.net.UrlInspector
 import cc.nanio.tug.ui.screens.AddTaskScreen
 import cc.nanio.tug.ui.screens.HomeScreen
 import cc.nanio.tug.ui.screens.SettingsScreen
@@ -89,12 +95,36 @@ fun TugRoot() {
         showAddSheet = true
     }
 
-    // 其他应用分享/打开进来的链接 → 打开新建面板并预填
+    val context = LocalContext.current
+    val webViewLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val downloadUrl = result.data
+                ?.getStringExtra(WebViewActivity.EXTRA_DOWNLOAD_URL)
+                ?.trim()
+            if (!downloadUrl.isNullOrEmpty()) openAdd(downloadUrl)
+        }
+    }
+
+    // 其他应用分享/打开进来的链接：直链或磁力直接新建下载，网页则交给 WebView。
     val pendingShare by app.pendingShare.collectAsState()
     LaunchedEffect(pendingShare) {
-        val url = pendingShare ?: return@LaunchedEffect
+        val raw = pendingShare ?: return@LaunchedEffect
+        when (val target = UrlInspector.inspect(raw)) {
+            is InspectedTarget.Download -> openAdd(target.url)
+            is InspectedTarget.WebPage -> {
+                webViewLauncher.launch(WebViewActivity.intent(context, target.url))
+            }
+            is InspectedTarget.Unsupported -> {
+                snackbarHostState.showSnackbar(context.getString(R.string.scan_unsupported))
+            }
+            is InspectedTarget.Failed -> {
+                snackbarHostState.showSnackbar(target.message)
+            }
+        }
+        // 必须在检查完成后再清空，否则 key 变化会取消当前 LaunchedEffect。
         app.pendingShare.value = null
-        openAdd(url)
     }
 
     // tug://task/{id} 深链 → 直达任务详情

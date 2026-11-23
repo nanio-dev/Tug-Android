@@ -252,4 +252,11 @@
     <string name="language_hi">हिन्दी</string>
     <string name="language_ar">العربية</string>
     <string name="language_dialog_title">選擇語言</string>
-</resources>
+    <!-- QR / web download -->
+    <string name="scan_qr">掃碼</string>
+    <string name="scan_prompt">掃描 QR Code 或連結</string>
+    <string name="scan_checking">正在檢查連結…</string>
+    <string name="scan_unsupported">不支援的類型</string>
+    <string name="webview_title">網頁下載</string>
+    <string name="webview_invalid_url">網頁位址無效</string>
+    <string name="webview_download_unsupported">此下載無法交給 Tug：%1$s</string></resources>

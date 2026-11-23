@@ -1,5 +1,6 @@
 package cc.nanio.tug.ui.screens
 
+import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -8,14 +9,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,16 +45,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cc.nanio.tug.R
 import cc.nanio.tug.TugApp
+import cc.nanio.tug.WebViewActivity
 import cc.nanio.tug.core.model.NewTask
 import cc.nanio.tug.core.model.TaskKind
 import cc.nanio.tug.core.model.TorrentMetadata
 import cc.nanio.tug.core.model.kindFor
+import cc.nanio.tug.net.InspectedTarget
+import cc.nanio.tug.net.UrlInspector
 import cc.nanio.tug.service.DownloadService
 import cc.nanio.tug.ui.LocalSnackbarHostState
 import cc.nanio.tug.ui.util.formatBytes
 import cc.nanio.tug.ui.util.rememberNotificationPermissionRequest
 import cc.nanio.tug.ui.vm.AddTaskViewModel
 import cc.nanio.tug.ui.vm.TugViewModelFactory
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -81,6 +90,53 @@ fun AddTaskScreen(
     var pendingMetadata by remember { mutableStateOf<TorrentMetadata?>(null) }
     var selectedFiles by remember { mutableStateOf<Set<Int>>(emptySet()) }
     var showFileDialog by remember { mutableStateOf(false) }
+    var inspecting by remember { mutableStateOf(false) }
+
+    val browserLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val downloadUrl = result.data
+                ?.getStringExtra(WebViewActivity.EXTRA_DOWNLOAD_URL)
+                ?.trim()
+            if (!downloadUrl.isNullOrEmpty()) {
+                url = downloadUrl
+                fileName = ""
+                torrentBytes = null
+                torrentName = null
+                error = null
+            }
+        }
+    }
+
+    val scanLauncher = rememberLauncherForActivityResult(ScanContract()) { result ->
+        val content = result.contents?.trim()
+        if (content.isNullOrEmpty()) return@rememberLauncherForActivityResult
+        scope.launch {
+            inspecting = true
+            when (val target = UrlInspector.inspect(content)) {
+                is InspectedTarget.Download -> {
+                    url = target.url
+                    fileName = target.suggestedName.orEmpty()
+                    torrentBytes = null
+                    torrentName = null
+                    error = null
+                }
+                is InspectedTarget.WebPage -> {
+                    browserLauncher.launch(WebViewActivity.intent(context, target.url))
+                }
+                is InspectedTarget.Unsupported -> {
+                    val message = context.getString(R.string.scan_unsupported)
+                    error = message
+                    snackbar?.showSnackbar(message)
+                }
+                is InspectedTarget.Failed -> {
+                    error = target.message
+                }
+            }
+            inspecting = false
+        }
+    }
 
     suspend fun enqueueTorrent(meta: TorrentMetadata, selected: Set<Int>) {
         if (submitting) return
@@ -141,7 +197,37 @@ fun AddTaskScreen(
                 .padding(bottom = 28.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Text(stringResource(R.string.add_title), style = MaterialTheme.typography.titleLarge)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    stringResource(R.string.add_title),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.weight(1f),
+                )
+                if (inspecting) {
+                    CircularProgressIndicator(modifier = Modifier.size(22.dp))
+                } else {
+                    IconButton(
+                        onClick = {
+                            if (parsing || submitting) return@IconButton
+                            val options = ScanOptions()
+                                .setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+                                .setPrompt(context.getString(R.string.scan_prompt))
+                                .setBeepEnabled(false)
+                                .setOrientationLocked(false)
+                            scanLauncher.launch(options)
+                        },
+                        enabled = !parsing && !submitting,
+                    ) {
+                        Icon(
+                            Icons.Outlined.QrCodeScanner,
+                            contentDescription = stringResource(R.string.scan_qr),
+                        )
+                    }
+                }
+            }
 
             OutlinedTextField(
                 value = url,
@@ -165,6 +251,7 @@ fun AddTaskScreen(
                     val message = error
                     when {
                         message != null -> Text(message)
+                        inspecting -> Text(stringResource(R.string.scan_checking))
                         torrentBytes != null -> Text(
                             stringResource(R.string.selected_torrent_file, torrentName ?: ""),
                         )
@@ -229,7 +316,7 @@ fun AddTaskScreen(
 
             Button(
                 onClick = {
-                    if (parsing || submitting) return@Button
+                    if (parsing || submitting || inspecting) return@Button
                     val target = url.trim()
                     val message = when {
                         torrentBytes != null -> null
@@ -326,7 +413,7 @@ fun AddTaskScreen(
                         }
                     }
                 },
-                enabled = !parsing && !submitting,
+                enabled = !parsing && !submitting && !inspecting,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("add_submit"),
