@@ -56,6 +56,7 @@ Tug-Android is the Android version of [Tug](https://github.com/nanio-dev/Tug-Des
 - Six settings sections: download, network, notifications, appearance (light/dark/system/dynamic color), background and battery, about
 - Foreground service + notifications: progress, completed/failed, pause all; tap a notification to open the task
 - Share intent handling (links/torrents) and `tug://task/{id}` deep links
+- QR-code downloads and opening Tug from HTTP/HTTPS or magnet links in other apps
 - Multilingual UI (Simplified Chinese, Traditional Chinese, English, Spanish, Hindi, Arabic)
 
 ### Download Libraries

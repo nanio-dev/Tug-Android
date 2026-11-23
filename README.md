@@ -56,6 +56,7 @@ Tug-Android 是 [Tug](https://github.com/nanio-dev/Tug-Desktop) 的 Android 版�
 - 设置六子页：下载、网络、通知、外观（浅色/深色/跟随系统/动态取色）、后台与电池、关于
 - 前台服务 + 通知：进度、完成/失败、全部暂停；通知点击直达任务详情
 - 分享接收（链接/种子）与 `tug://task/{id}` 深链
+- 扫码下载、外部 App 通过 HTTP/HTTPS 或磁力链接打开
 - 多语言界面（简体中文、繁體中文、English、Español、हिन्दी、العربية）
 
 ### 下载核心库
