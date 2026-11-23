@@ -73,11 +73,11 @@ Current version: ![Maven Central](https://img.shields.io/badge/dynamic/xml?url=h
 | `cc.nanio:tug-engine-torrent` | BitTorrent/magnet engine (libtorrent4j) |
 
 ```kotlin
-implementation("cc.nanio:tug-engine-core:1.0.0")
-implementation("cc.nanio:tug-http:1.0.0")          // or
-implementation("cc.nanio:tug-http-okhttp:1.0.0")
-implementation("cc.nanio:tug-store-sqlite:1.0.0")  // Android, optional
-implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android, optional
+implementation("cc.nanio:tug-engine-core:1.0.1")
+implementation("cc.nanio:tug-http:1.0.1")          // or
+implementation("cc.nanio:tug-http-okhttp:1.0.1")
+implementation("cc.nanio:tug-store-sqlite:1.0.1")  // Android, optional
+implementation("cc.nanio:tug-engine-torrent:1.0.1") // Android, optional
 ```
 
 > Public API and integration guide: [`public/API.en.md`](public/API.en.md).
@@ -285,7 +285,7 @@ keyPassword=******
 
 ## Roadmap
 
-- ✅ v1.0.0: HTTP/HTTPS multi-connection downloads, resume, background downloads, public Downloads publishing, full UI, deep links/share, BitTorrent/magnet (libtorrent4j), file selection toggle, Files/Peers/Trackers details, 5 reusable libraries and demos, multilingual UI (6 languages)
+- ✅ v1.0.1: HTTP/HTTPS multi-connection downloads, resume, background downloads, public Downloads publishing, full UI, deep links/share, BitTorrent/magnet (libtorrent4j), file selection toggle, Files/Peers/Trackers details, 5 reusable libraries and demos, multilingual UI (6 languages)
 - Planned: fastresume improvements, repeatable BT network tests, background BT/FGS
 
 ---

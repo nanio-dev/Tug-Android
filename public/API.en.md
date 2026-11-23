@@ -1,7 +1,7 @@
 # Tug Download Library · Public API
 
 > Language: [简体中文](API.md) · [繁體中文](API.zh-TW.md) · English
-> Version: v1.0.0
+> Version: v1.0.1
 
 Tug splits HTTP/HTTPS and BitTorrent downloading into independently consumable Kotlin/Android modules. Applications only need to create a `TaskManager` to get queuing, concurrency, state, and progress updates.
 
@@ -13,21 +13,21 @@ groupId: `cc.nanio`. All five modules share the same version.
 
 | Coordinate | Contents |
 |---|---|
-| `cc.nanio:tug-engine-core:1.0.0` | Engine contracts + models + `TaskManager`/`TaskStore` |
-| `cc.nanio:tug-http:1.0.0` | HTTP engine (JDK `HttpURLConnection`, no third-party HTTP dependency) |
-| `cc.nanio:tug-http-okhttp:1.0.0` | HTTP engine (OkHttp transport, choose one) |
-| `cc.nanio:tug-store-sqlite:1.0.0` | Persistent storage for tasks and settings |
-| `cc.nanio:tug-engine-torrent:1.0.0` | BitTorrent/magnet engine (libtorrent4j) |
+| `cc.nanio:tug-engine-core:1.0.1` | Engine contracts + models + `TaskManager`/`TaskStore` |
+| `cc.nanio:tug-http:1.0.1` | HTTP engine (JDK `HttpURLConnection`, no third-party HTTP dependency) |
+| `cc.nanio:tug-http-okhttp:1.0.1` | HTTP engine (OkHttp transport, choose one) |
+| `cc.nanio:tug-store-sqlite:1.0.1` | Persistent storage for tasks and settings |
+| `cc.nanio:tug-engine-torrent:1.0.1` | BitTorrent/magnet engine (libtorrent4j) |
 
 ```kotlin
 dependencies {
-    implementation("cc.nanio:tug-engine-core:1.0.0")
-    implementation("cc.nanio:tug-http:1.0.0")          // JDK implementation
+    implementation("cc.nanio:tug-engine-core:1.0.1")
+    implementation("cc.nanio:tug-http:1.0.1")          // JDK implementation
     // or
-    // implementation("cc.nanio:tug-http-okhttp:1.0.0") // OkHttp implementation
+    // implementation("cc.nanio:tug-http-okhttp:1.0.1") // OkHttp implementation
 
-    implementation("cc.nanio:tug-store-sqlite:1.0.0")   // Android, optional
-    implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android, optional
+    implementation("cc.nanio:tug-store-sqlite:1.0.1")   // Android, optional
+    implementation("cc.nanio:tug-engine-torrent:1.0.1") // Android, optional
 }
 ```
 
@@ -186,7 +186,7 @@ android {
 
 ## 7. Versioning and Compatibility
 
-- All five modules must use the same version (currently `1.0.0`).
+- All five modules must use the same version (currently `1.0.1`).
 - The public API of `tug-engine-core` follows semantic versioning; check Release Notes before upgrading.
 - Pure JVM modules do not depend on Android or Compose.
 

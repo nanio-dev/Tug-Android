@@ -829,7 +829,15 @@ class HttpDownloadEngine(
         while (true) {
             currentCoroutineContext().ensureActive()
             try {
-                return probe(url)
+                val result = probe(url)
+                // 有些 CDN 只在 HEAD 响应里带 Content-Disposition；URL 又可能没有后缀。
+                // 仅在探测响应没有文件名、且 URL 本身不像带扩展名时补一次 HEAD，避免额外请求正常链接。
+                if (result.fileName == null && !looksLikeFileName(guessNameFromUrl(url))) {
+                    probeFileNameFromHead(result.finalUrl ?: url)?.let { name ->
+                        return result.copy(fileName = name)
+                    }
+                }
+                return result
             } catch (c: CancellationException) {
                 throw c
             } catch (e: NonRetryableException) {
@@ -840,6 +848,33 @@ class HttpDownloadEngine(
                 TugLog.w(TugTags.HTTP, "探测失败，准备重试($attempt/${PROBE_RETRIES}): ${e.message}")
                 delay(backoffMs(attempt))
             }
+        }
+    }
+
+    /** HEAD 只用于补全无后缀 URL 的文件名；失败不影响正常探测。 */
+    private suspend fun probeFileNameFromHead(url: String): String? = withContext(downloadDispatcher) {
+        val call = transport.newCall(
+            HttpRequest(
+                url = url,
+                method = "HEAD",
+                headers = mapOf("Accept-Encoding" to "identity"),
+            ),
+        )
+        try {
+            call.execute().use { resp ->
+                if (resp.code in 200..299) {
+                    resp.header("Content-Disposition")?.let { parseContentDisposition(it) }
+                } else {
+                    null
+                }
+            }
+        } catch (c: CancellationException) {
+            throw c
+        } catch (e: Exception) {
+            TugLog.d(TugTags.HTTP, "HEAD 文件名探测失败: ${e.message}")
+            null
+        } finally {
+            runCatching { call.close() }
         }
     }
 
@@ -1022,17 +1057,30 @@ class HttpDownloadEngine(
             }
         }
 
+        /**
+         * 解析 RFC 5987 的 filename*，再回退到普通 filename。
+         * 文件名允许没有扩展名，不能在这里强行补 .bin。
+         */
         fun parseContentDisposition(value: String): String? {
             val star = Regex("filename\\*\\s*=\\s*[^']*'[^']*'([^;]+)", RegexOption.IGNORE_CASE)
                 .find(value)?.groupValues?.get(1)
             if (star != null) {
-                return runCatching {
-                    sanitizeFileName(java.net.URLDecoder.decode(star.trim().trim('"'), "UTF-8"))
+                val decoded = runCatching {
+                    java.net.URLDecoder.decode(star.trim().trim('"'), "UTF-8")
                 }.getOrNull()
+                if (!decoded.isNullOrBlank()) {
+                    return sanitizeFileName(decoded)
+                }
             }
             val plain = Regex("filename\\s*=\\s*\"?([^\";]+)\"?", RegexOption.IGNORE_CASE)
                 .find(value)?.groupValues?.get(1)
-            return plain?.let { sanitizeFileName(it.trim()) }
+            return plain?.trim()?.trim('"')?.takeIf { it.isNotEmpty() }?.let { sanitizeFileName(it) }
+        }
+
+        private fun looksLikeFileName(name: String): Boolean {
+            val clean = name.substringAfterLast('/').substringBefore('?')
+            val dot = clean.lastIndexOf('.')
+            return dot > 0 && clean.length - dot in 2..10
         }
 
         fun parseContentRangeTotal(contentRange: String): Long? {

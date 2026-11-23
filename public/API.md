@@ -1,7 +1,7 @@
 # Tug Download Library · Public API
 
 > 语言：[English](API.en.md) · [繁體中文](API.zh-TW.md) · 简体中文
-> 版本：v1.0.0
+> 版本：v1.0.1
 
 Tug 下载库把 HTTP/HTTPS、BitTorrent 下载能力拆成可独立依赖的 Kotlin/Android 模块。应用层只需创建 `TaskManager`，即可获得队列、并发、状态与进度更新。
 
@@ -13,21 +13,21 @@ groupId：`cc.nanio`，五个模块使用同一版本号。
 
 | 坐标 | 内容 |
 |---|---|
-| `cc.nanio:tug-engine-core:1.0.0` | 引擎契约 + 模型 + `TaskManager`/`TaskStore` |
-| `cc.nanio:tug-http:1.0.0` | HTTP 引擎（JDK `HttpURLConnection`，零三方 HTTP 依赖） |
-| `cc.nanio:tug-http-okhttp:1.0.0` | HTTP 引擎（OkHttp 传输，二选一） |
-| `cc.nanio:tug-store-sqlite:1.0.0` | 任务与设置的持久化存储 |
-| `cc.nanio:tug-engine-torrent:1.0.0` | BitTorrent/magnet 引擎（libtorrent4j） |
+| `cc.nanio:tug-engine-core:1.0.1` | 引擎契约 + 模型 + `TaskManager`/`TaskStore` |
+| `cc.nanio:tug-http:1.0.1` | HTTP 引擎（JDK `HttpURLConnection`，零三方 HTTP 依赖） |
+| `cc.nanio:tug-http-okhttp:1.0.1` | HTTP 引擎（OkHttp 传输，二选一） |
+| `cc.nanio:tug-store-sqlite:1.0.1` | 任务与设置的持久化存储 |
+| `cc.nanio:tug-engine-torrent:1.0.1` | BitTorrent/magnet 引擎（libtorrent4j） |
 
 ```kotlin
 dependencies {
-    implementation("cc.nanio:tug-engine-core:1.0.0")
-    implementation("cc.nanio:tug-http:1.0.0")          // JDK 实现
+    implementation("cc.nanio:tug-engine-core:1.0.1")
+    implementation("cc.nanio:tug-http:1.0.1")          // JDK 实现
     // 或
-    // implementation("cc.nanio:tug-http-okhttp:1.0.0") // OkHttp 实现
+    // implementation("cc.nanio:tug-http-okhttp:1.0.1") // OkHttp 实现
 
-    implementation("cc.nanio:tug-store-sqlite:1.0.0")   // Android，可选
-    implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android，可选
+    implementation("cc.nanio:tug-store-sqlite:1.0.1")   // Android，可选
+    implementation("cc.nanio:tug-engine-torrent:1.0.1") // Android，可选
 }
 ```
 
@@ -186,7 +186,7 @@ android {
 
 ## 7. 版本与兼容
 
-- 五个模块必须使用相同版本号（当前 `1.0.0`）。
+- 五个模块必须使用相同版本号（当前 `1.0.1`）。
 - `tug-engine-core` 的公开 API 遵循语义化版本；升级前请查看 Release Notes。
 - 纯 JVM 模块不包含 Android/Compose 依赖。
 

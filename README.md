@@ -73,11 +73,11 @@ Tug-Android 是 [Tug](https://github.com/nanio-dev/Tug-Desktop) 的 Android 版�
 | `cc.nanio:tug-engine-torrent` | BitTorrent/magnet 引擎（libtorrent4j） |
 
 ```kotlin
-implementation("cc.nanio:tug-engine-core:1.0.0")
-implementation("cc.nanio:tug-http:1.0.0")          // 或
-implementation("cc.nanio:tug-http-okhttp:1.0.0")
-implementation("cc.nanio:tug-store-sqlite:1.0.0")  // Android，可选
-implementation("cc.nanio:tug-engine-torrent:1.0.0") // Android，可选
+implementation("cc.nanio:tug-engine-core:1.0.1")
+implementation("cc.nanio:tug-http:1.0.1")          // 或
+implementation("cc.nanio:tug-http-okhttp:1.0.1")
+implementation("cc.nanio:tug-store-sqlite:1.0.1")  // Android，可选
+implementation("cc.nanio:tug-engine-torrent:1.0.1") // Android，可选
 ```
 
 > 公开 API 与接入说明见 [`public/API.md`](public/API.md)。
@@ -285,7 +285,7 @@ keyPassword=******
 
 ## 路线图
 
-- ✅ v1.0.0：HTTP/HTTPS 多连接下载、断点续传、后台下载、公共目录发布、完整 UI、深链/分享、BitTorrent/magnet（libtorrent4j）、文件选择开关、Files/Peers/Trackers 详情、5 个可复用库与 Demo、多语言界面（6 种语言）
+- ✅ v1.0.1：HTTP/HTTPS 多连接下载、断点续传、后台下载、公共目录发布、完整 UI、深链/分享、BitTorrent/magnet（libtorrent4j）、文件选择开关、Files/Peers/Trackers 详情、5 个可复用库与 Demo、多语言界面（6 种语言）
 - 计划中：fastresume 数据优化、网络 BT 可重复测试、后台 BT/FGS
 
 ---

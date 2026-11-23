@@ -45,6 +45,32 @@ class HttpHelpersTest {
     }
 
     @Test
+    fun parseContentDisposition_supportsNameWithoutExtension() {
+        assertEquals(
+            "download-report",
+            HttpDownloadEngine.parseContentDisposition(
+                "attachment; filename=\"download-report\"",
+            ),
+        )
+        assertEquals(
+            "无后缀文件",
+            HttpDownloadEngine.parseContentDisposition(
+                "attachment; filename*=UTF-8''%E6%97%A0%E5%90%8E%E7%BC%80%E6%96%87%E4%BB%B6",
+            ),
+        )
+    }
+
+    @Test
+    fun parseContentDisposition_prefersExtendedFilename() {
+        assertEquals(
+            "完整名称.pdf",
+            HttpDownloadEngine.parseContentDisposition(
+                "attachment; filename=\"fallback.bin\"; filename*=UTF-8''%E5%AE%8C%E6%95%B4%E5%90%8D%E7%A7%B0.pdf",
+            ),
+        )
+    }
+
+    @Test
     fun guessNameFromUrl_usesLastPathSegment() {
         assertEquals(
             "file.bin",

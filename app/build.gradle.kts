@@ -23,8 +23,8 @@ android {
         applicationId = "cc.nanio.tug"
         minSdk = 28
         targetSdk = 37
-        versionCode = 1
-        versionName = "v1.0.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -118,27 +118,27 @@ dependencies {
 }
 
 /**
- * 一键生成 v1.0.0 的按 ABI 拆分 APK、全 ABI APK 和 AAB，并写入 SHA256SUMS。
+ * 一键生成 v1.0.1 的按 ABI 拆分 APK、全 ABI APK 和 AAB，并写入 SHA256SUMS。
  *
  * 输出：
- * - tug-arm64-v1.0.0.apk
- * - tug-arm-v1.0.0.apk
- * - tug-v1.0.0.apk（全 ABI）
- * - tug-x86-v1.0.0.apk
- * - tug-x86_64-v1.0.0.apk
- * - tug-v1.0.0.aab
+ * - tug-arm64-v1.0.1.apk
+ * - tug-arm-v1.0.1.apk
+ * - tug-v1.0.1.apk（全 ABI）
+ * - tug-x86-v1.0.1.apk
+ * - tug-x86_64-v1.0.1.apk
+ * - tug-v1.0.1.aab
  * - SHA256SUMS.txt
  */
-val releaseAppVersion = android.defaultConfig.versionName ?: "v1.0.0"
+val releaseAppVersion = android.defaultConfig.versionName ?: "1.0.1"
 val releaseApkRoot = layout.buildDirectory.dir("outputs/apk").get().asFile
 val releaseBundleFile = layout.buildDirectory
     .file("outputs/bundle/universalRelease/app-universal-release.aab").get().asFile
-val releaseOutDir = rootProject.layout.projectDirectory.dir("release/v1.0.0").asFile
+val releaseOutDir = rootProject.layout.projectDirectory.dir("release/$releaseAppVersion").asFile
 
 val packageReleaseApks = tasks.register("packageReleaseApks") {
     group = "build"
-    description = "Build ABI split APKs, universal APK and AAB, then copy them to release/v1.0.0."
-    notCompatibleWithConfigurationCache("Copies assembled release outputs into release/v1.0.0.")
+    description = "Build ABI split APKs, universal APK and AAB, then copy them to release/$releaseAppVersion."
+    notCompatibleWithConfigurationCache("Copies assembled release outputs into release/v1.0.1.")
     dependsOn(
         "assembleArm64Release",
         "assembleArmRelease",
